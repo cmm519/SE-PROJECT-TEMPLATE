@@ -4,6 +4,8 @@ Local copy of [ciembor/agent-rules-books](https://github.com/ciembor/agent-rules
 
 Folder: `user resources/agent-rules-books/`
 
+These files are implementation bias. They are not your architecture and not your SRS. Read [ARCHITECTURE-NOTES.md](ARCHITECTURE-NOTES.md) before choosing one.
+
 ## What to load
 
 Each book folder has three rule sizes plus a `SKILL.md` entrypoint:
@@ -15,18 +17,22 @@ Each book folder has three rule sizes plus a `SKILL.md` entrypoint:
 | full `*.md` | Deep reference, audits, or one-off deep sessions |
 | `SKILL.md` | Skill entrypoint that points at the mini set |
 
-Prefer **one primary book** per session so rules do not fight each other.
+Prefer **one primary book** per session so rules do not fight each other. The compatibility matrix is `agent-rules-books/docs/COMPATIBILITY.md`.
 
-## Use with this MoT tutorial
+## Use with this MoT workflow
 
-1. Fill `project-brief.template.md` as usual.
-2. When you run the prompt generator or implementation guide, **attach or `@`-mention** one mini file (or that book's `SKILL.md`) so the agent keeps a consistent engineering bias.
-3. Examples of when to pick which set:
-   - Everyday coding / readability → `clean-code/clean-code.mini.md`
-   - Restructure without changing behavior → `refactoring/refactoring.mini.md`
-   - Hard-to-test or fragile code → `working-effectively-with-legacy-code/working-effectively-with-legacy-code.mini.md`
-   - Boundaries and dependency direction → `clean-architecture/clean-architecture.mini.md`
-   - Domain modeling → `domain-driven-design-distilled/domain-driven-design-distilled.mini.md` (lighter) or `domain-driven-design/domain-driven-design.mini.md`
+1. Fill `srs.template.md`, `architecture.template.md`, and `structure.template.md` as described in the root `README.md`.
+2. In `architecture.template.md`, set **Primary design rule** to one `*.mini.md` path, or to `none`.
+3. Stage 4 (the prompt generator) does not paste that file into the increments.
+4. Stage 6 (the implementation guide) reads that one path while it writes code. It does not open a second book.
+
+Examples of when to pick which set:
+
+- Everyday coding / readability → `clean-code/clean-code.mini.md`
+- Restructure without changing behavior → `refactoring/refactoring.mini.md`
+- Hard-to-test or fragile code → `working-effectively-with-legacy-code/working-effectively-with-legacy-code.mini.md`
+- Boundaries and dependency direction → `clean-architecture/clean-architecture.mini.md`
+- Domain modeling → `domain-driven-design-distilled/domain-driven-design-distilled.mini.md` (lighter) or `domain-driven-design/domain-driven-design.mini.md`
 
 These files stay under `user resources/` as portable reference. You do not need to install them into `.cursor/` for the MoT flow.
 
