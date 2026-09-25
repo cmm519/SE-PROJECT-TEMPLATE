@@ -1,47 +1,40 @@
-# How to use agent-rules-books (MoT / Cursor)
+# How to use agent-rules-books
 
-Local copy of [ciembor/agent-rules-books](https://github.com/ciembor/agent-rules-books) (MIT). These are **AGENTS.md-style rules and skills** inspired by classic software books. They are not the books themselves and are not a substitute for reading them.
+Local copy of [ciembor/agent-rules-books](https://github.com/ciembor/agent-rules-books) (MIT). These are decision rules inspired by software books. They are not the books, and they are not your architecture, your goals, or your context.
 
 Folder: `user resources/agent-rules-books/`
 
 ## What to load
 
-Each book folder has three rule sizes plus a `SKILL.md` entrypoint:
-
 | Version | Use when |
 | --- | --- |
-| `*.mini.md` | Default for real Cursor tasks (recommended) |
-| `*.nano.md` | Very tight always-on / portable baselines |
-| full `*.md` | Deep reference, audits, or one-off deep sessions |
-| `SKILL.md` | Skill entrypoint that points at the mini set |
+| `*.mini.md` | The one file this template will read during implementation |
+| `*.nano.md` | A smaller always-on baseline, if you later install rules yourself |
+| full `*.md` | A deep audit, not a normal session |
+| `SKILL.md` | Entrypoint that points at the mini set |
 
-Prefer **one primary book** per session so rules do not fight each other.
+Load one book. Pairs that conflict are listed in `agent-rules-books/docs/COMPATIBILITY.md`.
 
-## Use with this MoT tutorial
+## Use with this template
 
-1. Fill `project-brief.template.md` as usual.
-2. When you run the prompt generator or implementation guide, **attach or `@`-mention** one mini file (or that book's `SKILL.md`) so the agent keeps a consistent engineering bias.
-3. Examples of when to pick which set:
-   - Everyday coding / readability → `clean-code/clean-code.mini.md`
-   - Restructure without changing behavior → `refactoring/refactoring.mini.md`
-   - Hard-to-test or fragile code → `working-effectively-with-legacy-code/working-effectively-with-legacy-code.mini.md`
-   - Boundaries and dependency direction → `clean-architecture/clean-architecture.mini.md`
-   - Domain modeling → `domain-driven-design-distilled/domain-driven-design-distilled.mini.md` (lighter) or `domain-driven-design/domain-driven-design.mini.md`
+1. Fill `context.template.md`, `goals.template.md`, `architecture.template.md`, `structure.template.md`, and `method.template.md`.
+2. In `architecture.template.md`, set **Primary design rule** to one `*.mini.md` path, or to `none`.
+3. `AGENT-PROMPT.md` reads that one file while it writes code. It does not paste the book into `progress.md`, and it does not open a second book.
 
-These files stay under `user resources/` as portable reference. You do not need to install them into `.cursor/` for the MoT flow.
+Examples:
 
-## Optional later: Cursor project rules or skills
+- Everyday readability → `clean-code/clean-code.mini.md`
+- Behavior-preserving restructure → `refactoring/refactoring.mini.md`
+- Fragile or hard-to-test code → `working-effectively-with-legacy-code/working-effectively-with-legacy-code.mini.md`
+- Dependency direction → `clean-architecture/clean-architecture.mini.md`
+- Domain language → `domain-driven-design-distilled/domain-driven-design-distilled.mini.md`
 
-When you build a real app from this template and want a lasting bias:
-
-- Copy one `*.mini.md` into `.cursor/rules` as a scoped or manual rule, or
-- Use that book's `SKILL.md` pattern under `.cursor/skills` / `.agents/skills`
-
-Do not paste several `full` files into Always Apply rules.
+These files stay under `user resources/`. You do not need to copy them into `.cursor/` for this workflow.
 
 ## More detail
 
-- Overview and book list: `agent-rules-books/README.md`
-- Editor patterns (Cursor, Codex, Claude Code): `agent-rules-books/docs/USAGE.md`
+- Book list: `agent-rules-books/README.md`
+- Editor setup: `agent-rules-books/docs/USAGE.md`
+- Why this is not the architecture plan: `../METHODS.md`
 
 Upstream: https://github.com/ciembor/agent-rules-books

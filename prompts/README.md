@@ -1,13 +1,7 @@
 # prompts
 
-Generated step prompts go here. One markdown file per component, numbered so file order is execution order:
+This directory is not used by the current template.
 
-```
-01-project-setup.md
-02-dependencies.md
-03-first-component.md
-```
+The agent writes `progress.md` at the repository root and follows `AGENT-PROMPT.md`. It does not generate one prompt file per component.
 
-This folder starts empty of step prompts. Fill `project-brief.template.md`, then run `prompt-generator.template.md` in Cursor Agent. The generator writes the numbered files into this directory. Copy those filenames, in the same order, into `implementation-guide.template.md`.
-
-Do not put sample implementations or leftover domain notes in this folder.
+If this folder still contains numbered step files from an older run, delete them before you start a new project. Keep this README.
