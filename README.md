@@ -1,60 +1,82 @@
 # MoT project template
 
-This folder is a Cursor workflow for building a project from sequenced prompts. MoT here means the prompt pattern in the templates: critical requirements at the start and end of each prompt, `MANDATORY` and `CRITICAL` markers, bold text and code blocks, `###` sections, and only the context that one component needs.
+This folder is a Cursor workflow for building a project from sequenced prompts. The method is [Module of Thought_instr.md](Module of Thought_instr.md): a master context document, one verifiable capability per increment, critical checkpoints chosen before the build, and a tracking matrix.
 
-You fill in a project brief. Cursor writes one prompt per component, then a second session implements those prompts in order. This template does not contain an application.
+You write the requirements, the architecture, and the structure. A generator session turns those into prompt files. A later session implements the prompt files in order. This template does not contain an application.
 
-## What to copy
+## What you fill
 
-For a new project, copy these three files into that project's folder (or fill them in place if this folder is the new project):
+You fill three files, in order. Replace each `{{FILL: ...}}` token, including the braces. Leave a field blank only by writing `none`, and only in a section that allows it.
 
-| File | Role |
-| --- | --- |
-| `project-brief.template.md` | The only sheet you fill by hand |
-| `prompt-generator.template.md` | Agent prompt that writes step files into `prompts/` |
-| `implementation-guide.template.md` | Agent prompt that runs those files in order |
+| Order | File | What you are deciding |
+| --- | --- | --- |
+| 1 | [srs.template.md](srs.template.md) | What the system must do, for whom, and how you will know. No class names, no prompt filenames, no directory tree. |
+| 2 | [architecture.template.md](architecture.template.md) | The general shape: users and external systems, the main parts and their jobs, the stack, the hard constraints, and one to three decisions you are not leaving to the agent. Optional: one book rule path. |
+| 3 | [structure.template.md](structure.template.md) | The directory tree, which architecture part owns each path, and the build, run, and failure commands. |
 
-`prompts/` is where the generated step files land. See `prompts/README.md`.
+You do not copy those facts into the agent prompts. [prompt-generator.template.md](prompt-generator.template.md) and [implementation-guide.template.md](implementation-guide.template.md) read the three files.
 
-Every blank uses the form `{{FILL: name}}`. Replace the whole token, including the braces, with your text.
+You need to know the product well enough to write testable requirement rows (`SRS-FR-001`, `SRS-NFR-001`), to name the main parts, and to choose a tree and a stack. You do not need to write the increment list. The generator does that, and you review it before implementation.
 
-## What to fill
+## Stage tracker
 
-Open `project-brief.template.md` and replace each field:
+A stage is ready only when its check passes. An agent prompt must stop if an earlier file still contains `{{FILL:`.
 
-1. **Name** — short project name used in the other two templates.
-2. **Goal** — one paragraph: what it does and who it is for.
-3. **Stack** — language, runtime, frameworks, and build tool.
-4. **Hard constraints** — rules the agent must not break (scope limits, required libraries, formats).
-5. **Ordered components** — one line per prompt. Put project setup and dependencies first. Then one component per line. The filename (`01-....md`) is the file the generator must write.
-6. **Directory layout** — the tree the finished project must match.
-7. **Build and test commands** — the build that must succeed, the command that starts the app, and any extra checks.
-8. **Done criteria** — behavior you can observe when it works.
-9. **Architecture check** — each major part and its job.
-10. **If the build fails** — checks that match this stack.
-
-Then copy the same values into the matching `{{FILL: ...}}` spots in `prompt-generator.template.md` and `implementation-guide.template.md`. The implementation guide's numbered list must use the same filenames and order as the brief.
-
-Leave domain names, sample type lists, and sample behavior from any earlier project out of these files.
-
-## How to use
+| Stage | Who | File | Ready when |
+| --- | --- | --- | --- |
+| 1 | You | `srs.template.md` | Every must-have requirement has an ID, one testable statement, and a verification |
+| 2 | You | `architecture.template.md` | Context, containers, and decisions are filled. The design-rule path is a single `.mini.md` file or `none` |
+| 3 | You | `structure.template.md` | The directory tree and the ownership table match the architecture parts. Build and run commands are filled |
+| 4 | Agent | `prompt-generator.template.md` | It writes `prompts/00-master-context.md`, numbered increments, and `prompts/tracking.md`. It does not write application code |
+| 5 | You | `prompts/` | The increment list covers the SRS IDs and does not add parts you did not name |
+| 6 | Agent | `implementation-guide.template.md` | It runs the increments in filename order, updates `prompts/tracking.md`, and cites SRS IDs |
 
 ```mermaid
-flowchart LR
-  brief[project brief]
-  gen[prompt generator]
-  prompts[prompts folder]
-  guide[implementation guide]
-  app[your project]
-  brief --> gen --> prompts --> guide --> app
+flowchart TD
+  srs[01 SRS you fill]
+  arch[02 Architecture you fill]
+  struct[03 Structure you fill]
+  gen[04 Prompt generator agent]
+  master[prompts/00-master-context.md]
+  incs[prompts/01-N increment files]
+  track[prompts/tracking.md]
+  review[05 You review the increment list]
+  impl[06 Implementation agent]
+  srs --> gen
+  arch --> gen
+  struct --> gen
+  gen --> master
+  gen --> incs
+  gen --> track
+  master --> review
+  incs --> review
+  review --> impl
+  impl --> track
 ```
 
-1. Fill `project-brief.template.md`.
-2. Open a Cursor Agent chat. Attach or point it at the filled brief and `prompt-generator.template.md`. Tell it to follow that generator file. It should write one markdown file per component into `prompts/` and should not implement the app.
-3. Copy those filenames into `implementation-guide.template.md` in the same order. Fill the rest of that guide from the brief (commands, layout, done criteria).
-4. Open a new Agent chat. Point it at `implementation-guide.template.md` and the `prompts/` folder. It runs the prompts in order. After each prompt, fix errors from that step before the next one. When the list is done, run the brief's build and run commands and check the done criteria.
+## How to run it
 
-If a later prompt contradicts an earlier one, fix the prompt file, then rerun from that step. Do not let the agent invent components that are not in the brief.
+1. Fill `srs.template.md`, then `architecture.template.md`, then `structure.template.md`.
+2. Open a Cursor Agent chat. Point it at `prompt-generator.template.md`. It reads your three files and `Module of Thought_instr.md`, then writes the `prompts/` files. It must not implement the app.
+3. Read `prompts/00-master-context.md` and the increment filenames. Confirm every SRS ID is covered and no new part appears. Edit the prompt files if something is wrong. Do not start implementation until this review is done.
+4. Open a new Agent chat. Point it at `implementation-guide.template.md` and the `prompts/` folder. It loads the master context, runs the increment files in order, and updates `prompts/tracking.md` after each one.
+5. If a row goes red, the agent stops and follows the isolation steps in `Module of Thought_instr.md`. If a later prompt contradicts an earlier one, fix the prompt file, then rerun from that increment.
+
+The agent must not invent a requirement, a part, or a folder that your three files do not name.
+
+## Where generated files go
+
+`prompts/` starts without step files. See [prompts/README.md](prompts/README.md).
+
+| Generated file | Role |
+| --- | --- |
+| `prompts/00-master-context.md` | Prompt 0. Reload this at the start of every implementation session |
+| `prompts/01-....md` | One capability each. Filename order is execution order |
+| `prompts/tracking.md` | Increment, SRS IDs, status, and green / yellow / red |
+
+## Design rules from books
+
+Book-derived rules live in `user resources/agent-rules-books/`. They are optional implementation bias, not the architecture plan. The verdict is in [user resources/ARCHITECTURE-NOTES.md](user resources/ARCHITECTURE-NOTES.md). How to attach the one file you named is in [user resources/HOW-TO-agent-rules-books.md](user resources/HOW-TO-agent-rules-books.md).
 
 ## Optional setup: Git Bash as the default terminal
 
@@ -66,13 +88,6 @@ Cursor on Windows often uses PowerShell. PowerShell may not report that a termin
 
 New agent terminals then use Git Bash. This is a one-time editor setting, not part of the project files.
 
-## User resources
-
-Optional software-development notes and agent rule packs live in `user resources/`.
-
-- Book-derived Cursor/Codex/Claude rules: `user resources/agent-rules-books/`
-- How to use them with this MoT workflow: `user resources/HOW-TO-agent-rules-books.md`
-
 ## What not to leave in
 
-When you reuse this folder, delete or overwrite anything that names a previous product: sample class or module lists, sample screens, sample operations, and old build commands. The templates should describe only the project you are about to build.
+When you reuse this folder, delete generated files under `prompts/` except `prompts/README.md`. Overwrite the three templates so they describe only the project you are about to build. Do not leave an earlier product's requirement rows, part names, or commands in those files.
