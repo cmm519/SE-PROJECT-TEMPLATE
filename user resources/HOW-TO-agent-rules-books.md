@@ -21,8 +21,8 @@ Prefer **one primary book** per session so rules do not fight each other. The co
 
 ## Use with this MoT workflow
 
-1. Fill `srs.template.md`, `architecture.template.md`, and `structure.template.md` as described in the root `README.md`.
-2. In `architecture.template.md`, set **Primary design rule** to one `*.mini.md` path, or to `none`.
+1. Fill `srs.md`, `architecture.md`, and `structure.md` as described in the root `README.md`.
+2. In `architecture.md`, set **Primary design rule** to one `*.mini.md` path, or to `none`.
 3. Stage 4 (the prompt generator) does not paste that file into the increments.
 4. Stage 6 (the implementation guide) reads that one path while it writes code. It does not open a second book.
 
