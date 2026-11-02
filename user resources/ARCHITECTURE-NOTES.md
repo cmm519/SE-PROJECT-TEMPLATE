@@ -18,11 +18,11 @@ You write the plan. The agent reads it.
 
 | Question | File you fill | What the agent is allowed to do |
 | --- | --- | --- |
-| What must the software do? | `srs.template.md` | Cite IDs. Not invent requirements |
-| What are the parts and the decisions? | `architecture.template.md` | Stay inside the parts and decisions. Not invent a second architecture |
-| Where do the files go, and how do they build? | `structure.template.md` | Use those paths and commands |
+| What must the software do? | `srs.md` | Cite IDs. Not invent requirements |
+| What are the parts and the decisions? | `architecture.md` | Stay inside the parts and decisions. Not invent a second architecture |
+| Where do the files go, and how do they build? | `structure.md` | Use those paths and commands |
 
-`architecture.template.md` is a small C4-style plan: a context diagram, a container diagram, a part list, and one to three decisions (context, decision, rejected alternative). That is enough for a later session to reload. A full arc42 document or the whole of ISO/IEC/IEEE 42010 is more than this starter should inject into every chat.
+`architecture.md` is a small C4-style plan: a context diagram, a container diagram, a part list, and one to three decisions (context, decision, rejected alternative). That is enough for a later session to reload. A full arc42 document or the whole of ISO/IEC/IEEE 42010 is more than this starter should inject into every chat.
 
 The book rule is optional and late. If you set **Primary design rule** to one `*.mini.md` path, the implementation session reads that file while writing code inside the boundaries you already named. The prompt generator does not copy it into every increment.
 
@@ -30,4 +30,4 @@ The book rule is optional and late. If you set **Primary design rule** to one `*
 
 - Do not attach several book files "so the agent has more design standards."
 - Do not treat a book mini file as the system architecture.
-- Do not skip `architecture.template.md` because the book folder exists.
+- Do not skip `architecture.md` because the book folder exists.
